@@ -23,7 +23,6 @@ public class HelloController {
         getMQTT();
 
         welcomeText.setText(getInventory());
-
     }
 
     public void getMQTT() throws MqttException {
