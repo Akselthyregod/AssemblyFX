@@ -18,13 +18,15 @@ public class AssemblyMQTT {
     private static String CLIENT_ID = "AssemblyMQTT";
     private final String[] topicArray= {SUB_TOPIC2,SUB_TOPIC};
     private static AssemblyMQTT MQTT_instance = null;
-    private static String[] content;
+    private String[] content;
+    private String health;
 
     MqttClient client;
     private AssemblyMQTT() throws MqttException {
-        content = new String[3];
+        content = new String[4];
         MemoryPersistence persistence = new MemoryPersistence();
         client = new MqttClient(BROKER_ID,CLIENT_ID,persistence);
+
     }
 
     public void connect() throws MqttException {
@@ -55,9 +57,7 @@ public class AssemblyMQTT {
             mqttMessage.setQos(2);
             client.publish(PUB_TOPIC,mqttMessage);
 
-
     }
-
     public static AssemblyMQTT getInstance() throws MqttException {
         if (MQTT_instance == null) {
             MQTT_instance = new AssemblyMQTT();
@@ -67,17 +67,14 @@ public class AssemblyMQTT {
 
     public String removeChar(String s) {
         s = s.substring(1,s.length()-1);
-
         return s;
     }
-    public void processMessage(String message) {
+    public String[] processMessage(String message) throws InterruptedException {
         String s = removeChar(message);
         content = s.split(",");
-        for (int i = 0;i<content.length;i++) {
-            System.out.println(content[i]);
-            System.out.println("\n");
-        }
+        return content;
     }
+
 
     public void disconnectClient() throws MqttException {
         client.disconnect();
@@ -85,21 +82,36 @@ public class AssemblyMQTT {
         System.exit(0);
     }
 
-    public int getLastOperation(){
-        return Integer.parseInt(content[0]);
+    public String getLastOperation(){
+        return (content[0]);
     }
-    public int getCurrentOperation(){
-        return Integer.parseInt(content[1]);
+    public String getCurrentOperation(){
+        return (content[1]);
     }
-    public int getAssemblyStationState(){
-        return Integer.parseInt(content[2]);
+    public String getAssemblyStationState(){
+        return (content[2]);
     }
     public String getAssemblyTimeStamp(){
         return content[3];
     }
-    public boolean isAssemblyReady(){
-        return getCurrentOperation()==0;
+
+    public String getHealth(){
+        return this.health;
     }
 
 
+    public void printContent() {
+        System.out.println("Last Operation:"+ getLastOperation());
+        System.out.println("operation: "+ getCurrentOperation());
+        System.out.println("Assembly State: "+getAssemblyStationState());
+        System.out.println("Time: "+getAssemblyTimeStamp());
+        System.out.println(getHealth());
+
+    }
+    public void checkHealth(String message) {
+        this.health=removeChar(message);
+        System.out.println("ASSEMBLY HEALTH: "+health);
+
+
+    }
 }

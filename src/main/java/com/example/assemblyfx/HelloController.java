@@ -13,26 +13,27 @@ import java.nio.charset.StandardCharsets;
 public class HelloController {
     @FXML
     private Label welcomeText;
+    AssemblyMQTT mqtt;
 
     @FXML
     protected void onHelloButtonClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
+        mqtt.printContent();
+
+
     }
 
     public void initialize() throws MqttException, IOException, InterruptedException {
-        getMQTT();
-
+        mqtt = AssemblyMQTT.getInstance();
+        mqtt.connect();
+        mqtt.publishMessage(100);
         welcomeText.setText(getInventory());
 
     }
 
-    public void getMQTT() throws MqttException {
-        AssemblyMQTT mqtt = AssemblyMQTT.getInstance();
+    public void getMQTT() throws MqttException, InterruptedException {
 
-        mqtt.connect();
-
-        mqtt.publishMessage(100);
-
+        
 
     }
 
