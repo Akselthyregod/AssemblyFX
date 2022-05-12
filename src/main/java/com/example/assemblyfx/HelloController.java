@@ -4,6 +4,7 @@ import MQTT.AssemblyMQTT;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.json.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +59,16 @@ public class HelloController {
         InputStream in = process.getInputStream();
         InputStream err = process.getErrorStream();
 
-        return new String(err.readAllBytes(), StandardCharsets.UTF_8);
+        String raw = new String (err.readAllBytes(), StandardCharsets.UTF_8);
+
+        JSONObject obj = new JSONObject(raw);
+
+
+        return obj.toString();
+
+
 
     }
+
+
 }
