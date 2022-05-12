@@ -46,6 +46,86 @@ public class Warehouse {
 
     }
 
+    private String callPickItem(String trayID) throws IOException, InterruptedException {
+
+        /**
+         *      getInventory    :   arg[0] = "getInventory"
+         *
+         *         insertItem      :   arg[0] = "insertItem"
+         *                             arg[1] = name (String)
+         *                             arg[2] = trayID (int)
+         *
+         *         pickItem        :   arg[0] = "pickItem"
+         *                             arg[1] = trayID (int)
+         */
+
+
+        File file = new File("../AssemblyFX/src/main/resources/WarehouseSpring-0.0.1-SNAPSHOT.jar");
+        String filePath = file.getPath();
+
+        String[] args = new String[]{"pickItem", trayID};
+
+        Process process = Runtime.getRuntime().exec("java -jar "+ filePath +" " + args[0] + " " + args[1]);
+        InputStream in = process.getInputStream();
+        InputStream err = process.getErrorStream();
+
+        String rawErr = new String (err.readAllBytes(), StandardCharsets.UTF_8);
+        String rawIn = new String (in.readAllBytes(), StandardCharsets.UTF_8);
+
+        System.out.println(rawErr);
+        System.out.println("-----");
+        System.out.println(rawIn);
+
+
+        return "Pick";
+
+
+    }
+
+    private String callInsertItem(String name, String trayID) throws IOException, InterruptedException {
+
+        /**
+         *      getInventory    :   arg[0] = "getInventory"
+         *
+         *         insertItem      :   arg[0] = "insertItem"
+         *                             arg[1] = name (String)
+         *                             arg[2] = trayID (int)
+         *
+         *         pickItem        :   arg[0] = "pickItem"
+         *                             arg[1] = trayID (int)
+         */
+
+
+        File file = new File("../AssemblyFX/src/main/resources/WarehouseSpring-0.0.1-SNAPSHOT.jar");
+        String filePath = file.getPath();
+
+        String[] args = new String[]{"insertItem", name, trayID};
+
+        Process process = Runtime.getRuntime().exec("java -jar "+ filePath +" " + args[0] + " " + args[1] + " " + args[2]);
+        InputStream in = process.getInputStream();
+        InputStream err = process.getErrorStream();
+
+        String rawErr = new String (err.readAllBytes(), StandardCharsets.UTF_8);
+        String rawIn = new String (in.readAllBytes(), StandardCharsets.UTF_8);
+
+        System.out.println(rawErr);
+        System.out.println("-----");
+        System.out.println(rawIn);
+
+
+        return "Insert";
+
+
+    }
+
+    public String insertItem(String name, String trayID) throws IOException, InterruptedException {
+        return callInsertItem(name, trayID);
+    }
+
+    public String pickItem(String trayID) throws IOException, InterruptedException {
+        return callPickItem(trayID);
+    }
+
     private void parseJsonObj(JSONObject obj){
 
         int state = obj.getInt("State");

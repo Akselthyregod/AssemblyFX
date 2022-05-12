@@ -22,9 +22,9 @@ public class HelloController {
 
     @FXML
     protected void onHelloButtonClick() throws IOException, InterruptedException {
-        welcomeText.setText(warehouse.getTime());
 
-
+        System.out.println(warehouse.insertItem("test2","2"));
+        welcomeText.setText(warehouse.getInventory());
     }
 
     public void initialize() throws MqttException, IOException, InterruptedException {
