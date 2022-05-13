@@ -8,4 +8,6 @@ module com.example.assemblyfx {
 
     opens com.example.assemblyfx to javafx.fxml;
     exports com.example.assemblyfx;
+    exports com.example.assemblyfx.controllers;
+    opens com.example.assemblyfx.controllers to javafx.fxml;
 }
