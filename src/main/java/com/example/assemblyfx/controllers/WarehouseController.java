@@ -11,13 +11,11 @@ public class WarehouseController {
     public Label WarehouseLabel;
 
     public void initialize(){
-        WarehouseLabel.setText("WarehouseSet ");
-        System.out.println("Warehouse init");
-        WarehouseLabel.toFront();
+
     }
 
     public void injectMainController(HelloController helloController) {
         this.helloController = helloController;
-        System.out.println("Inject main");
+
     }
 }

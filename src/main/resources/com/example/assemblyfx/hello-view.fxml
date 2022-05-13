@@ -6,7 +6,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assemblyfx.controllers.HelloController">
    <children>
-      <TabPane layoutX="25.0" layoutY="24.0" prefHeight="683.0" prefWidth="1276.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="14.0" layoutY="21.0" prefHeight="683.0" prefWidth="1276.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
             <Tab text="Controls">
               <content>
@@ -14,19 +14,19 @@
               </content>
             </Tab>
           <Tab text="Warehouse">
-               <graphic>
+               <content>
                   <fx:include fx:id="warehouse" source="Warehouse.fxml" />
-               </graphic>
+               </content>
             </Tab>
           <Tab text="AGV">
-               <graphic>
+               <content>
                   <fx:include fx:id="agv" source="AGV.fxml" />
-               </graphic>
+               </content>
             </Tab>
             <Tab text="Assembly">
-               <graphic>
+               <content>
                   <fx:include fx:id="assembly" source="Assembly.fxml" />
-               </graphic>
+               </content>
             </Tab>
         </tabs>
       </TabPane>
