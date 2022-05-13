@@ -1,4 +1,4 @@
-package com.example.assemblyfx;
+package Warehouse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -145,6 +145,22 @@ public class Warehouse {
         System.out.println("Time: " + time);
     }
 
+    public Inventory getStringArray() throws IOException, InterruptedException {
+        String[] array = new String[12];
+        JSONObject obj = callGetInventory();
+
+        array[0] = obj.getString("DateTime");
+
+        JSONArray jsonInventory = obj.getJSONArray("Inventory");
+        for (int i = 0; i < jsonInventory.length(); i++) {
+            array[i+1] = (String) jsonInventory.getJSONObject(i).get("Content");
+        }
+
+        array[11] = String.valueOf(obj.getInt("State"));
+
+        return new Inventory(array);
+    }
+
     public String getState() throws IOException, InterruptedException {
         JSONObject obj = callGetInventory();
 
@@ -181,4 +197,6 @@ public class Warehouse {
 
         return time;
     }
+
+
 }

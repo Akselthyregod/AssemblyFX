@@ -10,4 +10,6 @@ module com.example.assemblyfx {
     exports com.example.assemblyfx;
     exports com.example.assemblyfx.controllers;
     opens com.example.assemblyfx.controllers to javafx.fxml;
+    exports Warehouse;
+    opens Warehouse to javafx.fxml;
 }

@@ -13,10 +13,19 @@
             <Font size="51.0" />
          </font>
       </Label>
-      <TableView layoutX="95.0" layoutY="127.0" prefHeight="200.0" prefWidth="200.0">
+      <TableView fx:id="tableViewInventory" layoutX="36.0" layoutY="126.0" prefHeight="200.0" prefWidth="858.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="C1" />
-          <TableColumn prefWidth="75.0" text="C2" />
+            <TableColumn fx:id="colTime" prefWidth="75.0" text="Time" />
+          <TableColumn fx:id="col1" prefWidth="75.0" text="C1" />
+          <TableColumn fx:id="col2" prefWidth="75.0" text="C2" />
+            <TableColumn fx:id="col3" prefWidth="75.0" text="C3" />
+            <TableColumn fx:id="col4" prefWidth="75.0" text="C4" />
+            <TableColumn fx:id="col5" prefWidth="75.0" text="C5" />
+            <TableColumn fx:id="col6" prefWidth="75.0" text="C6" />
+            <TableColumn fx:id="col7" prefWidth="75.0" text="C7" />
+            <TableColumn fx:id="col8" prefWidth="75.0" text="C8" />
+            <TableColumn fx:id="col9" prefWidth="75.0" text="C9" />
+            <TableColumn fx:id="col10" prefWidth="75.0" text="C10" />
         </columns>
       </TableView>
    </children>
