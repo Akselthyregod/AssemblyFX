@@ -8,6 +8,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="warehouse" prefHeight="400.0" prefWidth="472.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assemblyfx.controllers.WarehouseController">
+    <!--
    <children>
       <Label fx:id="WarehouseLabel" layoutX="51.0" layoutY="51.0" text="Warehouse">
          <font>
@@ -31,4 +32,5 @@
       </TableView>
       <Button fx:id="updateButton" layoutX="36.0" layoutY="343.0" mnemonicParsing="false" onMouseClicked="#UpdateTable" text="Update" />
    </children>
+    -->
 </AnchorPane>

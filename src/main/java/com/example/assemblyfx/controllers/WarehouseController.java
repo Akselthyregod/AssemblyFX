@@ -14,6 +14,7 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 
 public class WarehouseController {
+    /*
 
     public AnchorPane warehouse;
     public TableView tableViewInventory;
@@ -76,4 +77,6 @@ public class WarehouseController {
         });
 
     }
+
+     */
 }
