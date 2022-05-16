@@ -11,6 +11,15 @@ public class Inventory {
     public Inventory(String[] string){
         inventory = new String[12];
         System.arraycopy(string, 0, inventory, 0, 12);
+
+
+        //2022-05-16T08:58:03.6480577+00:00
+
+        String time = inventory[0];
+
+        inventory[0] = time.substring(11,19);
+
+
     }
 
     public String getTime(){
