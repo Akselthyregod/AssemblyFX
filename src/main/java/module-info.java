@@ -4,6 +4,7 @@ module com.example.assemblyfx {
     requires org.eclipse.paho.client.mqttv3;
     requires java.sql;
     requires org.json;
+    requires com.google.gson;
 
 
     opens com.example.assemblyfx to javafx.fxml;
