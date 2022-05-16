@@ -35,7 +35,7 @@ public class HelloController {
     public void initialize() throws MqttException, IOException, InterruptedException {
 
 
-        warehouseController.injectMainController(this);
+        //warehouseController.injectMainController(this);
     }
 
     public void getMQTT() throws MqttException, InterruptedException {
