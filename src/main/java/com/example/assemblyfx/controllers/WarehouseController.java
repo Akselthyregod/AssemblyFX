@@ -3,10 +3,9 @@ package com.example.assemblyfx.controllers;
 import Warehouse.Inventory;
 import Warehouse.Warehouse;
 import javafx.application.Platform;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -29,6 +28,11 @@ public class WarehouseController {
     public TableColumn<Inventory, String> col9;
     public TableColumn<Inventory, String> col10;
     public Button updateButton;
+    public TextField putField;
+    public ChoiceBox pickCB;
+    public Button pickBtn;
+    public ChoiceBox putCB;
+    public Button putBtn;
 
     private HelloController helloController;
     public Label WarehouseLabel;
@@ -36,11 +40,24 @@ public class WarehouseController {
     private Warehouse warehouseIns;
 
     public void initialize() throws IOException, InterruptedException {
-        initTableView();
+
         warehouseIns = new Warehouse();
 
-        tableViewInventory.getItems().add(warehouseIns.getStringArray());
+        initTableView();
+        initChoiceBoxes();
 
+
+    }
+
+    private void initChoiceBoxes() {
+        int size = 10;
+        String[] str = new String[size];
+        for (int i = 1; i <= size; i++) {
+            str[i-1] = String.valueOf(i);
+        }
+
+        pickCB.setItems(FXCollections.observableArrayList(str));
+        putCB.setItems(FXCollections.observableArrayList(str));
     }
 
     public void injectMainController(HelloController helloController) {
@@ -48,7 +65,7 @@ public class WarehouseController {
 
     }
 
-    private void initTableView(){
+    private void initTableView() throws IOException, InterruptedException {
 
         colTime.setCellValueFactory(new PropertyValueFactory<>("time"));
         col1.setCellValueFactory(new PropertyValueFactory<>("tray1"));
@@ -62,9 +79,10 @@ public class WarehouseController {
         col9.setCellValueFactory(new PropertyValueFactory<>("tray9"));
         col10.setCellValueFactory(new PropertyValueFactory<>("tray10"));
 
+        tableViewInventory.getItems().add(warehouseIns.getStringArray());
     }
 
-    public void UpdateTable(MouseEvent actionEvent) throws IOException, InterruptedException {
+    public void updateTable(ActionEvent actionEvent) throws IOException, InterruptedException {
 
         //not sure if needed
         Platform.runLater(()->{
@@ -75,5 +93,28 @@ public class WarehouseController {
             }
         });
 
+    }
+
+    public void putAction(ActionEvent actionEvent) throws IOException, InterruptedException {
+
+        String itemName = putField.getText();
+        int selected = putCB.getSelectionModel().getSelectedIndex() + 1;
+
+        String result = warehouseIns.insertItem(itemName, String.valueOf(selected));
+
+        System.out.println(result);
+
+        updateTable(new ActionEvent());
+    }
+
+    public void pickAction(ActionEvent actionEvent) throws IOException, InterruptedException {
+
+        int selected = pickCB.getSelectionModel().getSelectedIndex() + 1;
+
+        String result = warehouseIns.pickItem(String.valueOf(selected));
+
+        System.out.println(result);
+
+        updateTable(new ActionEvent());
     }
 }

@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="assembly" prefHeight="400.0" prefWidth="231.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assemblyfx.controllers.AssemblyController">
+<AnchorPane fx:id="assembly" prefHeight="425.0" prefWidth="643.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.assemblyfx.controllers.AssemblyController">
    <children>
-      <Label layoutX="72.0" layoutY="172.0" text="Assembly" />
+      <TextArea fx:id="status" layoutX="27.0" layoutY="67.0" prefHeight="38.0" prefWidth="114.0" />
+      <Button fx:id="statusBtn" layoutX="34.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnClick" text="Update" />
    </children>
 </AnchorPane>
