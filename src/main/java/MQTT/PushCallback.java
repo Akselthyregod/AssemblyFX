@@ -15,17 +15,19 @@ public class PushCallback implements MqttCallback {
     @Override
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
 
+
         instance = AssemblyMQTT.getInstance();
         String res = new String(mqttMessage.getPayload());
-        System.out.println("Topic to recieve message from: " + s);
-        System.out.println("receive messages QOS: " + mqttMessage.getQos());
+        //System.out.println("Topic to recieve message from: " + s);
+        //System.out.println("receive messages QOS: " + mqttMessage.getQos());
+
 
         if(s.equals("emulator/checkhealth")){
             instance.checkHealth(res);
             Thread.sleep(6000);
             return;
         }
-        System.out.println(res);
+        //System.out.println(res);
         //System.out.println("Message content: " + res);
         instance.processMessage(res);
         Thread.sleep(6000);
@@ -34,7 +36,7 @@ public class PushCallback implements MqttCallback {
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
-        System.out.println("Delivery complete " + iMqttDeliveryToken.isComplete());
+        System.out.println("Assembly connected " + iMqttDeliveryToken.isComplete());
 
     }
 }
