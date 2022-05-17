@@ -13,13 +13,15 @@ import java.sql.Timestamp;
 public class AssemblyMQTT {
     private final String SUB_TOPIC = "emulator/status";
     private final String SUB_TOPIC2 = "emulator/checkhealth";
+    private final String SUB_TOPIC3 = "emulator/response";
     private final String PUB_TOPIC = "emulator/operation";
     private final String BROKER_ID = "tcp://mqtt.localhost:1883";
     private static String CLIENT_ID = "AssemblyMQTT";
-    private final String[] topicArray= {SUB_TOPIC2,SUB_TOPIC};
+    private final String[] topicArray= {SUB_TOPIC2,SUB_TOPIC,SUB_TOPIC3};
     private static AssemblyMQTT MQTT_instance = null;
     private String[] content;
     private String health;
+    private String response;
 
     MqttClient client;
     private AssemblyMQTT() throws MqttException {
@@ -28,14 +30,16 @@ public class AssemblyMQTT {
         client = new MqttClient(BROKER_ID,CLIENT_ID,persistence);
 
     }
-
     public void connect() throws MqttException {
         //Hvad fanden skal vi bruge det her til
         MqttConnectOptions options= new MqttConnectOptions();
         options.setUserName("testMQTTClient");
         options.setPassword("testPassword".toCharArray());
-        // ???
+      //  options.setAutomaticReconnect(true);
         options.setCleanSession(true);
+        //options.setMaxInflight(1000);
+        // ???
+
 
         //Vores egen implementering af et MQTTcallback interface, håndterer hvad der skal ske når man modtager en besked osv.
         //Vi skal ændre implementeringen så den gør det vi vil med beskeden i fremtiden, lige nu tester vi bare.
@@ -44,7 +48,7 @@ public class AssemblyMQTT {
         //connecter *crossing fingers*
         client.connect(options);
 
-        //subscribe til topic
+        //subscribe til topics
         client.subscribe(topicArray);
 
     }
@@ -64,7 +68,6 @@ public class AssemblyMQTT {
         }
         return MQTT_instance;
     }
-
     public String removeChar(String s) {
         s = s.substring(1,s.length()-1);
         return s;
@@ -74,14 +77,11 @@ public class AssemblyMQTT {
         content = s.split(",");
         return content;
     }
-
-
     public void disconnectClient() throws MqttException {
         client.disconnect();
         client.close();
         System.exit(0);
     }
-
     public String getLastOperation(){
         return (content[0]);
     }
@@ -94,12 +94,9 @@ public class AssemblyMQTT {
     public String getAssemblyTimeStamp(){
         return content[3];
     }
-
     public String getHealth(){
         return this.health;
     }
-
-
     public void printContent() {
         System.out.println("Last Operation:"+ getLastOperation());
         System.out.println("operation: "+ getCurrentOperation());
@@ -110,8 +107,10 @@ public class AssemblyMQTT {
     }
     public void checkHealth(String message) {
         this.health=removeChar(message);
-        System.out.println("ASSEMBLY HEALTH: "+health);
+    }
 
+    public void setResponse(String message){
+        this.response= removeChar(message);
 
     }
 }

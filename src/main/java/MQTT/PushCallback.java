@@ -17,18 +17,21 @@ public class PushCallback implements MqttCallback {
 
         instance = AssemblyMQTT.getInstance();
         String res = new String(mqttMessage.getPayload());
-        System.out.println("Topic to recieve message from: " + s);
-        System.out.println("receive messages QOS: " + mqttMessage.getQos());
-
+       // System.out.println("Topic to recieve message from: " + s);
+        // System.out.println("receive messages QOS: " + mqttMessage.getQos());
         if(s.equals("emulator/checkhealth")){
             instance.checkHealth(res);
-            Thread.sleep(6000);
+            Thread.sleep(3000);
             return;
         }
-        System.out.println(res);
+        if (s.equals("emulator/response")) {
+            instance.setResponse(res);
+            Thread.sleep(3000);
+            return;
+        }
         //System.out.println("Message content: " + res);
         instance.processMessage(res);
-        Thread.sleep(6000);
+        Thread.sleep(3000);
 
     }
 
