@@ -8,11 +8,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-
+import javafx.scene.text.Text;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 
 public class AGVController implements Initializable {
     @FXML
@@ -25,6 +24,8 @@ public class AGVController implements Initializable {
     public Button getStatusButton;
     @FXML
     public Button runButton;
+    @FXML
+    public Text stateText;
 
     AGV agv1 = new AGV();
 
@@ -44,5 +45,4 @@ public class AGVController implements Initializable {
         String aa = String.valueOf(agv1.callGetStatus());
         currentStatus.setText(aa);
     }
-
 }
