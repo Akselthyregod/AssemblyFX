@@ -46,7 +46,6 @@ public class WarehouseController {
         initTableView();
         initChoiceBoxes();
 
-
     }
 
     private void initChoiceBoxes() {
@@ -62,7 +61,6 @@ public class WarehouseController {
 
     public void injectMainController(HelloController helloController) {
         this.helloController = helloController;
-
     }
 
     private void initTableView() throws IOException, InterruptedException {
@@ -83,7 +81,6 @@ public class WarehouseController {
     }
 
     public void updateTable(ActionEvent actionEvent) throws IOException, InterruptedException {
-
         //not sure if needed
         Platform.runLater(()->{
             try {
@@ -92,7 +89,6 @@ public class WarehouseController {
                 throw new RuntimeException(e);
             }
         });
-
     }
 
     public void putAction(ActionEvent actionEvent) throws IOException, InterruptedException {
@@ -101,7 +97,6 @@ public class WarehouseController {
         int selected = putCB.getSelectionModel().getSelectedIndex() + 1;
 
         Inventory result = warehouseIns.insertItem(itemName, String.valueOf(selected));
-
 
         tableViewInventory.getItems().add(result);
     }
