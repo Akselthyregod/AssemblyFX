@@ -100,21 +100,18 @@ public class WarehouseController {
         String itemName = putField.getText();
         int selected = putCB.getSelectionModel().getSelectedIndex() + 1;
 
-        String result = warehouseIns.insertItem(itemName, String.valueOf(selected));
+        Inventory result = warehouseIns.insertItem(itemName, String.valueOf(selected));
 
-        System.out.println(result);
 
-        updateTable(new ActionEvent());
+        tableViewInventory.getItems().add(result);
     }
 
     public void pickAction(ActionEvent actionEvent) throws IOException, InterruptedException {
 
         int selected = pickCB.getSelectionModel().getSelectedIndex() + 1;
 
-        String result = warehouseIns.pickItem(String.valueOf(selected));
+        Inventory result = warehouseIns.pickItem(String.valueOf(selected));
 
-        System.out.println(result);
-
-        updateTable(new ActionEvent());
+        tableViewInventory.getItems().add(result);
     }
 }

@@ -38,6 +38,7 @@ public class Warehouse {
 
         String raw = new String (err.readAllBytes(), StandardCharsets.UTF_8);
 
+        raw = raw.replace("Received inventory operation.", "");
         JSONObject obj = new JSONObject(raw);
 
 
@@ -46,7 +47,7 @@ public class Warehouse {
 
     }
 
-    private String callPickItem(String trayID) throws IOException, InterruptedException {
+    private Inventory callPickItem(String trayID) throws IOException, InterruptedException {
 
         /**
          *      getInventory    :   arg[0] = "getInventory"
@@ -60,6 +61,7 @@ public class Warehouse {
          */
 
 
+
         File file = new File("../AssemblyFX/src/main/resources/WarehouseSpring-0.0.1-SNAPSHOT.jar");
         String filePath = file.getPath();
 
@@ -69,20 +71,18 @@ public class Warehouse {
         InputStream in = process.getInputStream();
         InputStream err = process.getErrorStream();
 
-        String rawErr = new String (err.readAllBytes(), StandardCharsets.UTF_8);
-        String rawIn = new String (in.readAllBytes(), StandardCharsets.UTF_8);
+        String raw = new String (err.readAllBytes(), StandardCharsets.UTF_8);
 
-        System.out.println(rawErr);
-        System.out.println("-----");
-        System.out.println(rawIn);
+        raw = raw.replace("Received pick operation.", "");
+        JSONObject obj = new JSONObject(raw);
 
+        return getInventoryObj(obj);
 
-        return "Pick";
 
 
     }
 
-    private String callInsertItem(String name, String trayID) throws IOException, InterruptedException {
+    private Inventory callInsertItem(String name, String trayID) throws IOException, InterruptedException {
 
         /**
          *      getInventory    :   arg[0] = "getInventory"
@@ -105,24 +105,21 @@ public class Warehouse {
         InputStream in = process.getInputStream();
         InputStream err = process.getErrorStream();
 
-        String rawErr = new String (err.readAllBytes(), StandardCharsets.UTF_8);
-        String rawIn = new String (in.readAllBytes(), StandardCharsets.UTF_8);
+        String raw = new String (err.readAllBytes(), StandardCharsets.UTF_8);
 
-        System.out.println(rawErr);
-        System.out.println("-----");
-        System.out.println(rawIn);
+        raw = raw.replace("Received insert operation.", "");
+        JSONObject obj = new JSONObject(raw);
 
-
-        return "Insert";
+        return getInventoryObj(obj);
 
 
     }
 
-    public String insertItem(String name, String trayID) throws IOException, InterruptedException {
+    public Inventory insertItem(String name, String trayID) throws IOException, InterruptedException {
         return callInsertItem(name, trayID);
     }
 
-    public String pickItem(String trayID) throws IOException, InterruptedException {
+    public Inventory pickItem(String trayID) throws IOException, InterruptedException {
         return callPickItem(trayID);
     }
 
@@ -161,6 +158,21 @@ public class Warehouse {
         return new Inventory(array);
     }
 
+    private Inventory getInventoryObj(JSONObject obj){
+        String[] array = new String[12];
+
+        array[0] = obj.getString("DateTime");
+
+        JSONArray jsonInventory = obj.getJSONArray("Inventory");
+        for (int i = 0; i < jsonInventory.length(); i++) {
+            array[i+1] = (String) jsonInventory.getJSONObject(i).get("Content");
+        }
+
+        array[11] = String.valueOf(obj.getInt("State"));
+
+        return new Inventory(array);
+    }
+
     public String getState() throws IOException, InterruptedException {
         JSONObject obj = callGetInventory();
 
@@ -181,11 +193,9 @@ public class Warehouse {
         JSONObject obj = callGetInventory();
 
         JSONArray jsonInventory = obj.getJSONArray("Inventory");
-        JSONObject element = jsonInventory.getJSONObject(i);
+        JSONObject element = jsonInventory.getJSONObject(i-1);
 
-        System.out.print("Content: " + element.get("Content"));
-        System.out.println("| Id: " + element.get("Id"));
-        String elementString = "Content: " + element.get("Content") + "| Id: " + element.get("Id");
+        String elementString = "Content: " + element.get("Content") + " | Id: " + element.get("Id");
 
         return elementString;
     }
