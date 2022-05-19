@@ -55,4 +55,7 @@ public class Inventory {
     public String getTray10(){
         return inventory[10];
     }
+    public String getState(){
+        return inventory[11];
+    }
 }

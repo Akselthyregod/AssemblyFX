@@ -7,7 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -27,6 +26,7 @@ public class WarehouseController {
     public TableColumn<Inventory, String> col8;
     public TableColumn<Inventory, String> col9;
     public TableColumn<Inventory, String> col10;
+    public TableColumn<Inventory, String> col11;
     public Button updateButton;
     public TextField putField;
     public ChoiceBox pickCB;
@@ -34,15 +34,17 @@ public class WarehouseController {
     public ChoiceBox putCB;
     public Button putBtn;
 
-    private HelloController helloController;
+    private MainController helloController;
     public Label WarehouseLabel;
 
     private Warehouse warehouseIns;
 
+    private Inventory inventory;
+
     public void initialize() throws IOException, InterruptedException {
 
         warehouseIns = new Warehouse();
-
+        inventory = warehouseIns.getStringArray();
         initTableView();
         initChoiceBoxes();
 
@@ -59,7 +61,7 @@ public class WarehouseController {
         putCB.setItems(FXCollections.observableArrayList(str));
     }
 
-    public void injectMainController(HelloController helloController) {
+    public void injectMainController(MainController helloController) {
         this.helloController = helloController;
     }
 
@@ -76,6 +78,7 @@ public class WarehouseController {
         col8.setCellValueFactory(new PropertyValueFactory<>("tray8"));
         col9.setCellValueFactory(new PropertyValueFactory<>("tray9"));
         col10.setCellValueFactory(new PropertyValueFactory<>("tray10"));
+        col11.setCellValueFactory(new PropertyValueFactory<>("state"));
 
         tableViewInventory.getItems().add(warehouseIns.getStringArray());
     }
@@ -84,13 +87,17 @@ public class WarehouseController {
         //not sure if needed
         Platform.runLater(()->{
             try {
-                tableViewInventory.getItems().add(warehouseIns.getStringArray());
+                inventory = warehouseIns.getStringArray();
+                tableViewInventory.getItems().add(inventory);
             } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
             }
         });
     }
 
+    public Inventory getInventory(){
+        return this.inventory;
+    }
     public void putAction(ActionEvent actionEvent) throws IOException, InterruptedException {
 
         String itemName = putField.getText();

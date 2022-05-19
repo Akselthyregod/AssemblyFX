@@ -29,8 +29,14 @@ public class AGVController implements Initializable {
 
     AGV agv1 = new AGV();
 
-    private String[] allPrograms = {"MoveToChargerOperation", "MoveToAssemblyOperation","MoveToStorageOperation","PutAssemblyOperation",
-            "PickAssemblyOperation","PickWarehouseOperation", "PutWarehouseOperation"};
+
+    //Need a map of all values/states of the component
+
+    private String[] allPrograms =
+            {"MoveToChargerOperation", "MoveToAssemblyOperation",
+            "MoveToStorageOperation","PutAssemblyOperation",
+            "PickAssemblyOperation","PickWarehouseOperation",
+            "PutWarehouseOperation"};
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1){

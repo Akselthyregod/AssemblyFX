@@ -11,6 +11,8 @@ import javafx.scene.control.TextField;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AssemblyController {
     @FXML
@@ -31,6 +33,8 @@ public class AssemblyController {
     private Label health;
     AssemblyMQTT mqtt;
 
+    private Map<String, String> info;
+
     public AssemblyController() throws MqttException {
     }
 
@@ -38,13 +42,33 @@ public class AssemblyController {
         mqtt = AssemblyMQTT.getInstance();
         mqtt.connect();
         mqtt.publishMessage(500);
+
+        Thread.sleep(3500);
+        info = new HashMap<>();
+        updateMap();
+
     }
 
     public void btnClick(ActionEvent actionEvent) {
-        lastOP.setText(mqtt.getLastOperation());
-        currentOP.setText(mqtt.getCurrentOperation());
-        state.setText(mqtt.getAssemblyStationState());
-        time.setText(mqtt.getAssemblyTimeStamp());
-        health.setText(mqtt.getHealth());
+
+        updateMap();
+
+        lastOP.setText(info.get("lastOP"));
+        currentOP.setText(info.get("currentOP"));
+        state.setText(info.get("state"));
+        time.setText(info.get("time"));
+        health.setText(info.get("health"));
+    }
+
+    private void updateMap(){
+        info.put("lastOP", mqtt.getLastOperation());
+        info.put("currentOP", mqtt.getCurrentOperation());
+        info.put("state", mqtt.getAssemblyStationState());
+        info.put("time", mqtt.getAssemblyTimeStamp());
+        info.put("health", mqtt.getHealth());
+    }
+
+    public Map<String, String> getInfo(){
+        return info;
     }
 }

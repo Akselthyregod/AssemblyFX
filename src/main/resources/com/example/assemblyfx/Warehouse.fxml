@@ -29,6 +29,7 @@
             <TableColumn fx:id="col8" prefWidth="75.0" text="C8" />
             <TableColumn fx:id="col9" prefWidth="75.0" text="C9" />
             <TableColumn fx:id="col10" prefWidth="75.0" text="C10" />
+            <TableColumn fx:id="col11" prefWidth="75.0" text="C11" />
         </columns>
       </TableView>
       <Button fx:id="updateButton" layoutX="36.0" layoutY="343.0" mnemonicParsing="false" onAction="#updateTable" text="Update" />
