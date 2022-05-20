@@ -10,6 +10,7 @@ public class Inventory {
 
     public Inventory(String[] string){
         inventory = new String[12];
+
         System.arraycopy(string, 0, inventory, 0, 12);
 
 

@@ -15,7 +15,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="464.0" prefWidth="954.0">
                      <children>
-                        <TextArea fx:id="textWarehouse" layoutX="609.0" layoutY="87.0" prefHeight="378.0" prefWidth="200.0" />
+                        <TextArea fx:id="textWarehouse" layoutX="609.0" layoutY="87.0" prefHeight="232.0" prefWidth="200.0" />
                         <TextArea fx:id="textAGV" layoutX="379.0" layoutY="87.0" prefHeight="53.0" prefWidth="200.0" />
                         <TextArea fx:id="textAssembly" layoutX="141.0" layoutY="87.0" prefHeight="53.0" prefWidth="200.0" />
                         <Label layoutX="141.0" layoutY="49.0" text="Assembly" />

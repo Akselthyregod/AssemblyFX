@@ -24,11 +24,13 @@ public class AGV {
             while ((line = reader.readLine()) != null) {
                 line = reader.readLine();
                 newLine = line;
+                System.out.println(newLine);
             }
             reader.close();
         } catch (final Exception e) {
             e.printStackTrace();
         }
+
         JSONObject data = new JSONObject(newLine);
         return data;
     }

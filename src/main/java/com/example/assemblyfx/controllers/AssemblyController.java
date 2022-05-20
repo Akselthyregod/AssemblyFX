@@ -68,6 +68,12 @@ public class AssemblyController {
         info.put("health", mqtt.getHealth());
     }
 
+    public Map<String, String> insertItem() throws MqttException {
+        mqtt.publishMessage(6000);
+        updateMap();
+        return info;
+    }
+
     public Map<String, String> getInfo(){
         return info;
     }

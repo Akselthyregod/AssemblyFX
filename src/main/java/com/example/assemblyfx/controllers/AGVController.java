@@ -9,8 +9,13 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class AGVController implements Initializable {
@@ -29,6 +34,7 @@ public class AGVController implements Initializable {
 
     AGV agv1 = new AGV();
 
+    private Map<String, String> status;
 
     //Need a map of all values/states of the component
 
@@ -41,6 +47,12 @@ public class AGVController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1){
         chooseProgram.getItems().addAll(allPrograms);
+        this.status = new HashMap<>();
+    }
+
+    public Map<String, String> setProgram(String program) throws IOException, InterruptedException {
+        agv1.callSetProgram(program);
+        return getStatus();
     }
 
     public void onRunProgram(ActionEvent actionEvent) throws IOException, InterruptedException {
@@ -50,5 +62,24 @@ public class AGVController implements Initializable {
     public void onGetStatus() throws IOException, InterruptedException {
         String aa = String.valueOf(agv1.callGetStatus());
         currentStatus.setText(aa);
+    }
+
+    public Map<String, String> getStatus() throws IOException, InterruptedException {
+        JSONObject obj = agv1.callGetStatus();
+        /*
+        Keys:
+        state
+        battery
+        program name
+        timestamp
+         */
+
+        status.put("state", String.valueOf(obj.getInt("state")));
+        status.put("battery", String.valueOf(obj.getInt("battery")));
+
+        status.put("program name", obj.getString("program name"));
+        status.put("timestamp", obj.getString("timestamp"));
+
+        return status;
     }
 }

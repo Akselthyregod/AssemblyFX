@@ -116,4 +116,12 @@ public class WarehouseController {
 
         tableViewInventory.getItems().add(result);
     }
+
+    public Inventory pickItem(String trayID) throws IOException, InterruptedException {
+        return warehouseIns.pickItem(trayID);
+    }
+
+    public Inventory putItem(String trayID) throws IOException, InterruptedException {
+        return warehouseIns.insertItem(trayID, "name");
+    }
 }
