@@ -22,7 +22,7 @@
                         <Label layoutX="379.0" layoutY="49.0" text="AGV" />
                         <Label layoutX="609.0" layoutY="49.0" text="Warehouse" />
                         <Button layoutX="39.0" layoutY="101.0" mnemonicParsing="false" onAction="#updateText" text="Update" />
-                        <Button layoutX="41.0" layoutY="308.0" mnemonicParsing="false" onAction="#startProduction" text="Start Production" />
+                        <Button fx:id="startButton" layoutX="41.0" layoutY="308.0" mnemonicParsing="false" onAction="#startProduction" text="Start Prod" />
                      </children></AnchorPane>
               </content>
             </Tab>

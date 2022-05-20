@@ -2,8 +2,10 @@ package com.example.assemblyfx.controllers;
 
 import MQTT.AssemblyMQTT;
 import Warehouse.Inventory;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
@@ -21,6 +23,7 @@ public class MainController {
     public TextArea textAssembly;
     public TextArea textAGV;
     public TextArea textWarehouse;
+    public Button startButton;
     @FXML
     private Label welcomeText;
     AssemblyMQTT mqtt;
@@ -95,6 +98,7 @@ public class MainController {
 
         System.out.println("Start");
 
+
         agvInfo = agvController.setProgram("MoveToStorageOperation");
         timeout(1000);
 
@@ -113,17 +117,17 @@ public class MainController {
         System.out.println("Assembly");
 
         agvInfo = agvController.setProgram("PickAssemblyOperation");
-        timeout(5000);
+        timeout(1000);
 
         agvInfo = agvController.setProgram("MoveToStorageOperation");
-        timeout(5000);
+        timeout(1000);
 
         agvInfo = agvController.setProgram("PutWarehouseOperation");
         warehouseInventory = warehouseController.putItem("3");
-        timeout(5000);
+        timeout(1000);
 
         agvInfo = agvController.setProgram("MoveToChargerOperation");
-        timeout(5000);
+        timeout(1000);
     }
 
     private void timeout(int time) throws InterruptedException, IOException {

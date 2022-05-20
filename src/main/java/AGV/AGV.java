@@ -24,15 +24,21 @@ public class AGV {
             while ((line = reader.readLine()) != null) {
                 line = reader.readLine();
                 newLine = line;
-                System.out.println(newLine);
+
             }
             reader.close();
         } catch (final Exception e) {
             e.printStackTrace();
         }
 
-        JSONObject data = new JSONObject(newLine);
-        return data;
+        try {
+            JSONObject data = new JSONObject(newLine);
+            return data;
+        }catch (Exception e){
+            return null;
+        }
+
+
     }
 
     public void callSetProgram(String programName) throws IOException, InterruptedException {

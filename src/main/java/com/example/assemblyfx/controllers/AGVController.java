@@ -73,6 +73,9 @@ public class AGVController implements Initializable {
         program name
         timestamp
          */
+        if(obj == null){
+            return status;
+        }
 
         status.put("state", String.valueOf(obj.getInt("state")));
         status.put("battery", String.valueOf(obj.getInt("battery")));
