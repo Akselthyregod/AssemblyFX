@@ -3,15 +3,21 @@ package com.example.assemblyfx.controllers;
 import MQTT.AssemblyMQTT;
 import Warehouse.Inventory;
 import javafx.application.Platform;
+import javafx.beans.Observable;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableStringValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 public class MainController {
@@ -24,6 +30,9 @@ public class MainController {
     public TextArea textAGV;
     public TextArea textWarehouse;
     public Button startButton;
+    public Label AssemblyState;
+    public Label AGVState;
+    public TableView statusTable;
     @FXML
     private Label welcomeText;
     AssemblyMQTT mqtt;
@@ -42,14 +51,40 @@ public class MainController {
 
     private Map<String, String> agvInfo;
 
+    private final ObservableList<Status> statusObservableList = FXCollections.observableArrayList();
+
 
     public void initialize() throws MqttException, IOException, InterruptedException {
 
         updateInfo();
         updateText(new ActionEvent());
+        initTableView();
 
     }
 
+
+    private void initTableView() throws IOException, InterruptedException {
+
+        TableColumn<Status, String> col1 = new TableColumn<>("Time");
+        TableColumn<Status, String> col2 = new TableColumn<>("AGV");
+        TableColumn<Status, String> col3 = new TableColumn<>("Assembly");
+        TableColumn<Status, String> col4 = new TableColumn<>("Warehouse");
+        statusTable.getColumns().addAll(col1, col2, col3, col4);
+
+
+        col1.setCellValueFactory(status -> new SimpleStringProperty(status.getValue().time()));
+        col2.setCellValueFactory(status -> new SimpleStringProperty(status.getValue().stateAGV()));
+        col3.setCellValueFactory(status -> new SimpleStringProperty(status.getValue().stateAssembly()));
+        col4.setCellValueFactory(status -> new SimpleStringProperty(status.getValue().stateWarehouse()));
+
+        statusTable.setItems(statusObservableList);
+    }
+
+    private void addToTable(){
+
+        statusObservableList.add(new Status(agvInfo.get("state"), assemblyInfo.get("state"), warehouseInventory.getState(), new Date().toString()));
+
+   }
 
     public void getWarehouseInventory(){
         warehouseInventory = warehouseController.getInventory();
@@ -76,6 +111,8 @@ public class MainController {
         textAGV.setText(agvInfo.get("state") + "\n" + agvInfo.get("program name"));
         textWarehouse.setText("State: " + warehouseInventory.getState());
         setWarehouseText();
+
+        addToTable();
     }
 
     public void startProduction(ActionEvent actionEvent) throws IOException, InterruptedException, MqttException {
@@ -96,38 +133,52 @@ public class MainController {
             "PutWarehouseOperation"};
         */
 
-        System.out.println("Start");
+            System.out.println("Start");
+            flow1();
 
+            timeout(500);
 
+            flow2();
+            timeout(500);
+
+            System.out.println("picked");
+            flow3();
+            timeout(500);
+
+            agvInfo = agvController.setProgram("PutAssemblyOperation");
+            assemblyInfo = assemblyController.insertItem();
+            timeout(500);
+
+            System.out.println("Assembly");
+
+            agvInfo = agvController.setProgram("PickAssemblyOperation");
+            timeout(500);
+
+            agvInfo = agvController.setProgram("MoveToStorageOperation");
+            timeout(500);
+
+            agvInfo = agvController.setProgram("PutWarehouseOperation");
+            warehouseInventory = warehouseController.putItem("3");
+            timeout(500);
+
+            agvInfo = agvController.setProgram("MoveToChargerOperation");
+            timeout(500);
+
+    }
+
+    private void flow1() throws IOException, InterruptedException {
         agvInfo = agvController.setProgram("MoveToStorageOperation");
-        timeout(1000);
+        addToTable();
 
+    }
+    private void flow2() throws IOException, InterruptedException {
         warehouseInventory = warehouseController.pickItem("3");
         agvInfo = agvController.setProgram("PickWarehouseOperation");
-        timeout(1000);
-
-        System.out.println("picked");
+        addToTable();
+    }
+    private void flow3() throws IOException, InterruptedException {
         agvInfo = agvController.setProgram("MoveToAssemblyOperation");
-        timeout(1000);
-
-        agvInfo = agvController.setProgram("PutAssemblyOperation");
-        assemblyInfo = assemblyController.insertItem();
-        timeout(1000);
-
-        System.out.println("Assembly");
-
-        agvInfo = agvController.setProgram("PickAssemblyOperation");
-        timeout(1000);
-
-        agvInfo = agvController.setProgram("MoveToStorageOperation");
-        timeout(1000);
-
-        agvInfo = agvController.setProgram("PutWarehouseOperation");
-        warehouseInventory = warehouseController.putItem("3");
-        timeout(1000);
-
-        agvInfo = agvController.setProgram("MoveToChargerOperation");
-        timeout(1000);
+        addToTable();
     }
 
     private void timeout(int time) throws InterruptedException, IOException {
@@ -148,4 +199,8 @@ public class MainController {
         textWarehouse.appendText("\n10: " + warehouseInventory.getTray10());
 
     }
+
+
+    public record Status(String stateAGV, String stateAssembly, String stateWarehouse, String time){}
+
 }
