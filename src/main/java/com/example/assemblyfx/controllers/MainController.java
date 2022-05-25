@@ -79,6 +79,8 @@ public class MainController {
 
     //"static" position set when move button is pressed
     private String agvPosition;
+    public String agvHoldingItem;
+    public String assemblyHoldingItem;
 
     private final ObservableList<Status> statusObservableList = FXCollections.observableArrayList();
 
@@ -148,12 +150,25 @@ public class MainController {
     }
 
     //refresh text areas from maps
-    private void refreshText(){
-        textAssembly.setText("State: " + assemblyInfo.get("state") + "\nHealth: " + assemblyInfo.get("health"));
-        textAGV.setText("Position: " + agvPosition + "\nState: " + agvInfo.get("state") + "\n" + agvInfo.get("program name") + "\nBattery: " + agvInfo.get("battery"));
-        textWarehouse.setText("State: " + warehouseInventory.getState());
-        setWarehouseText();
+    private void refreshText() throws IOException, InterruptedException {
+        updateInfo();
 
+        textAssembly.setText(
+                "State: " + assemblyInfo.get("state") +
+                "\nItem: " + assemblyHoldingItem +
+                "\nHealth: " + assemblyInfo.get("health"));
+
+        textAGV.setText(
+                "Position: " + agvPosition +
+                "\nItem: " + agvHoldingItem +
+                "\nState: " + agvInfo.get("state") +
+                "\n" + agvInfo.get("program name") +
+                "\nBattery: " + agvInfo.get("battery"));
+
+        textWarehouse.setText(
+                "State: " + warehouseInventory.getState());
+
+        setWarehouseText();
         addToTable();
     }
 
@@ -178,7 +193,6 @@ public class MainController {
     }
 
 
-
     private void timeout(int time) throws InterruptedException, IOException {
         Thread.sleep(time);
         updateText(new ActionEvent());
@@ -198,7 +212,7 @@ public class MainController {
 
     }
 
-    public void chargeButton(ActionEvent actionEvent) throws IOException, InterruptedException {
+    public void moveChargeButton(ActionEvent actionEvent) throws IOException, InterruptedException {
         agvInfo = agvController.setProgram("MoveToChargerOperation");
         agvPosition = "Charging";
         refreshText();
@@ -222,28 +236,28 @@ public class MainController {
     public void putAssemblyButton(ActionEvent actionEvent) throws IOException, InterruptedException, MqttException {
         agvInfo = agvController.setProgram("PutAssemblyOperation");
         assemblyInfo = assemblyController.insertItem();
+        assemblyHoldingItem = agvHoldingItem;
+        agvHoldingItem = null;
         refreshText();
         checkButtons();
     }
 
     public void pickAssemblyButton(ActionEvent actionEvent) throws IOException, InterruptedException {
         agvInfo = agvController.setProgram("PickAssemblyOperation");
+        agvHoldingItem = assemblyHoldingItem;
+        assemblyHoldingItem = null;
         refreshText();
         checkButtons();
     }
 
     public void putWarehouseButton(ActionEvent actionEvent) throws IOException, InterruptedException {
         agvInfo = agvController.setProgram("PutWarehouseOperation");
-        warehouseInventory = warehouseController.putItem("3");
-        refreshText();
         checkButtons();
         tabPane.getSelectionModel().selectNext();
     }
 
     public void pickWarehouseButton(ActionEvent actionEvent) throws IOException, InterruptedException {
-        warehouseInventory = warehouseController.pickItem("3");
         agvInfo = agvController.setProgram("PickWarehouseOperation");
-        refreshText();
         checkButtons();
         tabPane.getSelectionModel().selectNext();
     }
@@ -252,6 +266,7 @@ public class MainController {
 
         //disable all buttons, then depending on current position enable specific ones
         moveChargeBtn.setDisable(true);
+
         moveAssemblyBtn.setDisable(true);
         moveWarehouseBtn.setDisable(true);
 
@@ -261,8 +276,11 @@ public class MainController {
         putAssemblyBtn.setDisable(true);
         pickAssemblyBtn.setDisable(true);
 
+        int battery = Integer.parseInt(agvInfo.get("battery"));
 
-        if(agvPosition == null){
+        if(battery<25){
+            moveChargeBtn.setDisable(false);
+        }else if(agvPosition == null){
             //if null forced move
             moveChargeBtn.setDisable(false);
             moveAssemblyBtn.setDisable(false);

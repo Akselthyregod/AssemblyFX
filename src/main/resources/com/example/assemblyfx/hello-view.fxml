@@ -23,9 +23,8 @@
                         <Label layoutX="720.0" layoutY="58.0" text="AGV" />
                         <Label layoutX="720.0" layoutY="280.0" text="Warehouse" />
                         <Button layoutX="715.0" layoutY="28.0" mnemonicParsing="false" onAction="#updateText" text="Update" />
-                        <Button fx:id="startButton" layoutX="41.0" layoutY="38.0" mnemonicParsing="false" onAction="#startProduction" text="Start Prod" />
                         <TableView fx:id="statusTable" layoutX="193.0" layoutY="80.0" prefHeight="200.0" prefWidth="459.0" />
-                        <Button fx:id="moveChargeBtn" layoutX="43.0" layoutY="80.0" mnemonicParsing="false" onAction="#chargeButton" text="Move Charge" />
+                        <Button fx:id="moveChargeBtn" layoutX="43.0" layoutY="80.0" mnemonicParsing="false" onAction="#moveChargeButton" text="Move Charge" />
                         <Button fx:id="moveAssemblyBtn" layoutX="43.0" layoutY="114.0" mnemonicParsing="false" onAction="#moveAssemblyButton" text="Move Assembly" />
                         <Button fx:id="moveWarehouseBtn" layoutX="43.0" layoutY="146.0" mnemonicParsing="false" onAction="#moveWarehouseButton" text="Move Warehouse" />
                         <Button fx:id="putAssemblyBtn" layoutX="53.0" layoutY="539.0" mnemonicParsing="false" onAction="#putAssemblyButton" text="Put Assembly" />

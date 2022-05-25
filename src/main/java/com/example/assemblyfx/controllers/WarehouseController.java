@@ -117,6 +117,7 @@ public class WarehouseController {
 
         itemPicked = inventory.getX(selected);
         putField.setText("Picked: " + itemPicked);
+        helloController.agvHoldingItem = itemPicked;
 
         Inventory result = warehouseIns.pickItem(String.valueOf(selected));
 
@@ -130,14 +131,17 @@ public class WarehouseController {
         itemPicked = inventory.getX(Integer.parseInt(trayID));
         putField.setText("Picked: " + itemPicked);
 
+        helloController.agvHoldingItem = itemPicked;
+
         return inventory;
     }
 
     public Inventory putItem(String trayID) throws IOException, InterruptedException {
-        return warehouseIns.insertItem(trayID, itemPicked);
+        return warehouseIns.insertItem(trayID, helloController.agvHoldingItem);
     }
 
-    public void returnToControls(ActionEvent actionEvent) {
+    public void returnToControls(ActionEvent actionEvent) throws IOException, InterruptedException {
+        helloController.updateText(actionEvent);
         helloController.tabPane.getSelectionModel().select(0);
     }
 }
