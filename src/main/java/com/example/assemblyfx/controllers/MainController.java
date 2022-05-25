@@ -33,6 +33,14 @@ public class MainController {
     public Label AssemblyState;
     public Label AGVState;
     public TableView statusTable;
+    public TabPane tabPane;
+    public Button moveChargeBtn;
+    public Button moveAssemblyBtn;
+    public Button moveWarehouseBtn;
+    public Button putAssemblyBtn;
+    public Button pickAssemblyBtn;
+    public Button putWarehouseBtn;
+    public Button pickWarehouseBtn;
     @FXML
     private Label welcomeText;
     AssemblyMQTT mqtt;
@@ -46,10 +54,31 @@ public class MainController {
     @FXML
     private AGVController agvController;
 
+    //Inventory getters:
+    // getTime, getState, getTray(1-10)
     private Inventory warehouseInventory;
+
+    /*
+    Assembly keys:
+    "lastOP"
+    "currentOP"
+    "state"
+    "time"
+    "health"
+    */
     private Map<String, String> assemblyInfo;
 
+    /*
+    AGV Keys:
+    state
+    battery
+    program name
+    timestamp
+     */
     private Map<String, String> agvInfo;
+
+    //"static" position set when move button is pressed
+    private String agvPosition;
 
     private final ObservableList<Status> statusObservableList = FXCollections.observableArrayList();
 
@@ -59,6 +88,11 @@ public class MainController {
         updateInfo();
         updateText(new ActionEvent());
         initTableView();
+        checkButtons();
+
+
+        //inject this controller in warehouse to allow it to access tabPane
+        warehouseController.injectMainController(this);
 
     }
 
@@ -100,15 +134,23 @@ public class MainController {
 
     }
 
+    //pulls info from services. Takes a bit of time to execute
     private void updateInfo() throws IOException, InterruptedException {
         getWarehouseInventory();
         getAssemblyMap();
         getAGVInfo();
     }
 
+    //button update
     public void updateText(ActionEvent actionEvent) throws IOException, InterruptedException {
-        textAssembly.setText(assemblyInfo.get("state"));
-        textAGV.setText(agvInfo.get("state") + "\n" + agvInfo.get("program name"));
+        updateInfo();
+        refreshText();
+    }
+
+    //refresh text areas from maps
+    private void refreshText(){
+        textAssembly.setText("State: " + assemblyInfo.get("state") + "\nHealth: " + assemblyInfo.get("health"));
+        textAGV.setText("Position: " + agvPosition + "\nState: " + agvInfo.get("state") + "\n" + agvInfo.get("program name") + "\nBattery: " + agvInfo.get("battery"));
         textWarehouse.setText("State: " + warehouseInventory.getState());
         setWarehouseText();
 
@@ -133,53 +175,9 @@ public class MainController {
             "PutWarehouseOperation"};
         */
 
-            System.out.println("Start");
-            flow1();
-
-            timeout(500);
-
-            flow2();
-            timeout(500);
-
-            System.out.println("picked");
-            flow3();
-            timeout(500);
-
-            agvInfo = agvController.setProgram("PutAssemblyOperation");
-            assemblyInfo = assemblyController.insertItem();
-            timeout(500);
-
-            System.out.println("Assembly");
-
-            agvInfo = agvController.setProgram("PickAssemblyOperation");
-            timeout(500);
-
-            agvInfo = agvController.setProgram("MoveToStorageOperation");
-            timeout(500);
-
-            agvInfo = agvController.setProgram("PutWarehouseOperation");
-            warehouseInventory = warehouseController.putItem("3");
-            timeout(500);
-
-            agvInfo = agvController.setProgram("MoveToChargerOperation");
-            timeout(500);
-
     }
 
-    private void flow1() throws IOException, InterruptedException {
-        agvInfo = agvController.setProgram("MoveToStorageOperation");
-        addToTable();
 
-    }
-    private void flow2() throws IOException, InterruptedException {
-        warehouseInventory = warehouseController.pickItem("3");
-        agvInfo = agvController.setProgram("PickWarehouseOperation");
-        addToTable();
-    }
-    private void flow3() throws IOException, InterruptedException {
-        agvInfo = agvController.setProgram("MoveToAssemblyOperation");
-        addToTable();
-    }
 
     private void timeout(int time) throws InterruptedException, IOException {
         Thread.sleep(time);
@@ -198,6 +196,101 @@ public class MainController {
         textWarehouse.appendText("\n9: " + warehouseInventory.getTray9());
         textWarehouse.appendText("\n10: " + warehouseInventory.getTray10());
 
+    }
+
+    public void chargeButton(ActionEvent actionEvent) throws IOException, InterruptedException {
+        agvInfo = agvController.setProgram("MoveToChargerOperation");
+        agvPosition = "Charging";
+        refreshText();
+        checkButtons();
+    }
+
+    public void moveAssemblyButton(ActionEvent actionEvent) throws IOException, InterruptedException {
+        agvInfo = agvController.setProgram("MoveToAssemblyOperation");
+        agvPosition = "Assembly";
+        refreshText();
+        checkButtons();
+    }
+
+    public void moveWarehouseButton(ActionEvent actionEvent) throws IOException, InterruptedException {
+        agvInfo = agvController.setProgram("MoveToStorageOperation");
+        agvPosition = "Warehouse";
+        refreshText();
+        checkButtons();
+    }
+
+    public void putAssemblyButton(ActionEvent actionEvent) throws IOException, InterruptedException, MqttException {
+        agvInfo = agvController.setProgram("PutAssemblyOperation");
+        assemblyInfo = assemblyController.insertItem();
+        refreshText();
+        checkButtons();
+    }
+
+    public void pickAssemblyButton(ActionEvent actionEvent) throws IOException, InterruptedException {
+        agvInfo = agvController.setProgram("PickAssemblyOperation");
+        refreshText();
+        checkButtons();
+    }
+
+    public void putWarehouseButton(ActionEvent actionEvent) throws IOException, InterruptedException {
+        agvInfo = agvController.setProgram("PutWarehouseOperation");
+        warehouseInventory = warehouseController.putItem("3");
+        refreshText();
+        checkButtons();
+        tabPane.getSelectionModel().selectNext();
+    }
+
+    public void pickWarehouseButton(ActionEvent actionEvent) throws IOException, InterruptedException {
+        warehouseInventory = warehouseController.pickItem("3");
+        agvInfo = agvController.setProgram("PickWarehouseOperation");
+        refreshText();
+        checkButtons();
+        tabPane.getSelectionModel().selectNext();
+    }
+
+    private void checkButtons() throws InterruptedException, IOException {
+
+        //disable all buttons, then depending on current position enable specific ones
+        moveChargeBtn.setDisable(true);
+        moveAssemblyBtn.setDisable(true);
+        moveWarehouseBtn.setDisable(true);
+
+        putWarehouseBtn.setDisable(true);
+        pickWarehouseBtn.setDisable(true);
+
+        putAssemblyBtn.setDisable(true);
+        pickAssemblyBtn.setDisable(true);
+
+
+        if(agvPosition == null){
+            //if null forced move
+            moveChargeBtn.setDisable(false);
+            moveAssemblyBtn.setDisable(false);
+            moveWarehouseBtn.setDisable(false);
+        }else if(agvPosition.equals("Charging")){
+            if(agvInfo.get("battery").equals("100")){
+                moveChargeBtn.setDisable(true);
+                moveAssemblyBtn.setDisable(false);
+                moveWarehouseBtn.setDisable(false);
+            }
+            //recursive call to recheck battery level
+            else{
+                getAGVInfo();
+                checkButtons();
+            }
+        }else if(agvPosition.equals("Warehouse")){
+            moveChargeBtn.setDisable(false);
+            moveAssemblyBtn.setDisable(false);
+
+            putWarehouseBtn.setDisable(false);
+            pickWarehouseBtn.setDisable(false);
+        }else if(agvPosition.equals("Assembly")){
+            moveChargeBtn.setDisable(false);
+            moveWarehouseBtn.setDisable(false);
+
+            putAssemblyBtn.setDisable(false);
+            pickAssemblyBtn.setDisable(false);
+        }
     }
 
 

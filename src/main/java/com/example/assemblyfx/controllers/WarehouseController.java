@@ -41,12 +41,15 @@ public class WarehouseController {
 
     private Inventory inventory;
 
+    private String itemPicked;
+
     public void initialize() throws IOException, InterruptedException {
 
         warehouseIns = new Warehouse();
         inventory = warehouseIns.getStringArray();
         initTableView();
         initChoiceBoxes();
+
 
     }
 
@@ -112,16 +115,29 @@ public class WarehouseController {
 
         int selected = pickCB.getSelectionModel().getSelectedIndex() + 1;
 
+        itemPicked = inventory.getX(selected);
+        putField.setText("Picked: " + itemPicked);
+
         Inventory result = warehouseIns.pickItem(String.valueOf(selected));
 
         tableViewInventory.getItems().add(result);
     }
 
     public Inventory pickItem(String trayID) throws IOException, InterruptedException {
-        return warehouseIns.pickItem(trayID);
+
+        inventory = warehouseIns.pickItem(trayID);
+
+        itemPicked = inventory.getX(Integer.parseInt(trayID));
+        putField.setText("Picked: " + itemPicked);
+
+        return inventory;
     }
 
     public Inventory putItem(String trayID) throws IOException, InterruptedException {
-        return warehouseIns.insertItem(trayID, "name");
+        return warehouseIns.insertItem(trayID, itemPicked);
+    }
+
+    public void returnToControls(ActionEvent actionEvent) {
+        helloController.tabPane.getSelectionModel().select(0);
     }
 }

@@ -23,6 +23,10 @@ public class Inventory {
 
     }
 
+    public String getX(int x){
+        return inventory[x];
+    }
+
     public String getTime(){
         return inventory[0];
     }
