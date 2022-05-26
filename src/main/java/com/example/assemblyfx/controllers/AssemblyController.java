@@ -34,6 +34,7 @@ public class AssemblyController {
     AssemblyMQTT mqtt;
 
     private Map<String, String> info;
+    private MainController helloController;
 
     public AssemblyController() throws MqttException {
     }
@@ -41,14 +42,15 @@ public class AssemblyController {
     public void initialize() throws MqttException, IOException, InterruptedException {
         mqtt = AssemblyMQTT.getInstance();
         mqtt.connect();
-        mqtt.publishMessage(500);
 
-        Thread.sleep(3500);
         info = new HashMap<>();
         updateMap();
-
     }
 
+    public void startMessage() throws MqttException {
+        mqtt.publishMessage(1000);
+    }
+    
     public void btnClick(ActionEvent actionEvent) {
 
         updateMap();
@@ -66,12 +68,12 @@ public class AssemblyController {
         info.put("state", mqtt.getAssemblyStationState());
         info.put("time", mqtt.getAssemblyTimeStamp());
         info.put("health", mqtt.getHealth());
+
     }
 
     public Map<String, String> insertItem() throws MqttException {
         mqtt.publishMessage(6000);
-        updateMap();
-        return info;
+        return mqtt.getContent();
     }
 
     public Map<String, String> getInfo(){

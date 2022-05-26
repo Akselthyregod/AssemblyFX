@@ -8,6 +8,8 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class AssemblyMQTT {
@@ -76,6 +78,26 @@ public class AssemblyMQTT {
         String s = removeChar(message);
         content = s.split(",");
         return content;
+    }
+
+    /*
+    Assembly keys:
+    "lastOP"
+    "currentOP"
+    "state"
+    "time"
+    "health"
+    */
+    public Map<String, String> getContent(){
+        Map<String, String> map = new HashMap<>();
+
+        map.put("lastOP", content[0]);
+        map.put("currentOP", content[1]);
+        map.put("state", content[2]);
+        map.put("time", content[3]);
+        map.put("health", getHealth());
+
+        return map;
     }
     public void disconnectClient() throws MqttException {
         client.disconnect();

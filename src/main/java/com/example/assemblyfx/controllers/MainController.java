@@ -56,7 +56,7 @@ public class MainController {
 
     //Inventory getters:
     // getTime, getState, getTray(1-10)
-    private Inventory warehouseInventory;
+    public Inventory warehouseInventory;
 
     /*
     Assembly keys:
@@ -92,6 +92,8 @@ public class MainController {
         initTableView();
         checkButtons();
 
+        assemblyController.startMessage();
+        assemblyInfo = assemblyController.getInfo();
 
         //inject this controller in warehouse to allow it to access tabPane
         warehouseController.injectMainController(this);
@@ -150,13 +152,12 @@ public class MainController {
     }
 
     //refresh text areas from maps
-    private void refreshText() throws IOException, InterruptedException {
+    public void refreshText() throws IOException, InterruptedException {
         updateInfo();
 
         textAssembly.setText(
                 "State: " + assemblyInfo.get("state") +
-                "\nItem: " + assemblyHoldingItem +
-                "\nHealth: " + assemblyInfo.get("health"));
+                "\nItem: " + assemblyHoldingItem );
 
         textAGV.setText(
                 "Position: " + agvPosition +

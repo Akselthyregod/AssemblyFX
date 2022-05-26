@@ -104,9 +104,12 @@ public class WarehouseController {
     public void putAction(ActionEvent actionEvent) throws IOException, InterruptedException {
 
         String itemName = putField.getText();
+        helloController.agvHoldingItem = null;
+
         int selected = putCB.getSelectionModel().getSelectedIndex() + 1;
 
         Inventory result = warehouseIns.insertItem(itemName, String.valueOf(selected));
+        inventory = result;
 
         tableViewInventory.getItems().add(result);
     }
@@ -120,6 +123,7 @@ public class WarehouseController {
         helloController.agvHoldingItem = itemPicked;
 
         Inventory result = warehouseIns.pickItem(String.valueOf(selected));
+        inventory = result;
 
         tableViewInventory.getItems().add(result);
     }
@@ -141,7 +145,8 @@ public class WarehouseController {
     }
 
     public void returnToControls(ActionEvent actionEvent) throws IOException, InterruptedException {
-        helloController.updateText(actionEvent);
+        helloController.warehouseInventory = inventory;
+        helloController.refreshText();
         helloController.tabPane.getSelectionModel().select(0);
     }
 }

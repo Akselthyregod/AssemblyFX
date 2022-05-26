@@ -16,14 +16,14 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="464.0" prefWidth="954.0">
                      <children>
-                        <TextArea fx:id="textWarehouse" layoutX="720.0" layoutY="318.0" prefHeight="192.0" prefWidth="200.0" />
-                        <TextArea fx:id="textAGV" layoutX="720.0" layoutY="85.0" prefHeight="175.0" prefWidth="200.0" />
-                        <TextArea fx:id="textAssembly" layoutX="720.0" layoutY="583.0" prefHeight="53.0" prefWidth="200.0" />
-                        <Label layoutX="720.0" layoutY="545.0" text="Assembly" />
-                        <Label layoutX="720.0" layoutY="58.0" text="AGV" />
-                        <Label layoutX="720.0" layoutY="280.0" text="Warehouse" />
-                        <Button layoutX="715.0" layoutY="28.0" mnemonicParsing="false" onAction="#updateText" text="Update" />
-                        <TableView fx:id="statusTable" layoutX="193.0" layoutY="80.0" prefHeight="200.0" prefWidth="459.0" />
+                        <TextArea fx:id="textWarehouse" layoutX="229.0" layoutY="296.0" prefHeight="192.0" prefWidth="200.0" />
+                        <TextArea fx:id="textAGV" layoutX="229.0" layoutY="63.0" prefHeight="175.0" prefWidth="200.0" />
+                        <TextArea fx:id="textAssembly" layoutX="229.0" layoutY="544.0" prefHeight="87.0" prefWidth="200.0" />
+                        <Label layoutX="229.0" layoutY="523.0" text="Assembly" />
+                        <Label layoutX="229.0" layoutY="36.0" text="AGV" />
+                        <Label layoutX="229.0" layoutY="258.0" text="Warehouse" />
+                        <Button layoutX="224.0" layoutY="6.0" mnemonicParsing="false" onAction="#updateText" text="Update" />
+                        <TableView fx:id="statusTable" layoutX="740.0" layoutY="26.0" prefHeight="200.0" prefWidth="459.0" />
                         <Button fx:id="moveChargeBtn" layoutX="43.0" layoutY="80.0" mnemonicParsing="false" onAction="#moveChargeButton" text="Move Charge" />
                         <Button fx:id="moveAssemblyBtn" layoutX="43.0" layoutY="114.0" mnemonicParsing="false" onAction="#moveAssemblyButton" text="Move Assembly" />
                         <Button fx:id="moveWarehouseBtn" layoutX="43.0" layoutY="146.0" mnemonicParsing="false" onAction="#moveWarehouseButton" text="Move Warehouse" />
@@ -31,9 +31,9 @@
                         <Button fx:id="pickAssemblyBtn" layoutX="53.0" layoutY="574.0" mnemonicParsing="false" onAction="#pickAssemblyButton" text="Pick Assembly" />
                         <Button fx:id="putWarehouseBtn" layoutX="48.0" layoutY="318.0" mnemonicParsing="false" onAction="#putWarehouseButton" text="Put Warehouse" />
                         <Button fx:id="pickWarehouseBtn" layoutX="48.0" layoutY="351.0" mnemonicParsing="false" onAction="#pickWarehouseButton" text="Pick Warehouse" />
-                        <TextArea layoutX="950.0" layoutY="319.0" prefHeight="84.0" prefWidth="120.0" text="States&#10;0 : Idle &#10;1 : Executing&#10;2 : Error" />
-                        <TextArea layoutX="950.0" layoutY="89.0" prefHeight="95.0" prefWidth="120.0" text="States&#10;1 : Idle&#10;2 : Executing&#10;3 : Charging" />
-                        <TextArea layoutX="950.0" layoutY="568.0" prefHeight="84.0" prefWidth="120.0" text="States&#10;0 : Idle &#10;1 : Executing&#10;2 : Error" />
+                        <TextArea layoutX="459.0" layoutY="297.0" prefHeight="84.0" prefWidth="120.0" text="States&#10;0 : Idle &#10;1 : Executing&#10;2 : Error" />
+                        <TextArea layoutX="459.0" layoutY="67.0" prefHeight="95.0" prefWidth="120.0" text="States&#10;1 : Idle&#10;2 : Executing&#10;3 : Charging" />
+                        <TextArea layoutX="459.0" layoutY="546.0" prefHeight="84.0" prefWidth="120.0" text="States&#10;0 : Idle &#10;1 : Executing&#10;2 : Error" />
                      </children></AnchorPane>
               </content>
             </Tab>

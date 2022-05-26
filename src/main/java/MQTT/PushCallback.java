@@ -21,17 +21,14 @@ public class PushCallback implements MqttCallback {
         // System.out.println("receive messages QOS: " + mqttMessage.getQos());
         if(s.equals("emulator/checkhealth")){
             instance.checkHealth(res);
-            Thread.sleep(3000);
             return;
         }
         if (s.equals("emulator/response")) {
             instance.setResponse(res);
-            Thread.sleep(3000);
             return;
         }
         //System.out.println("Message content: " + res);
         instance.processMessage(res);
-        Thread.sleep(3000);
 
     }
 
