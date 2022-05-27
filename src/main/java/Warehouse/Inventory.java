@@ -13,14 +13,13 @@ public class Inventory {
 
         System.arraycopy(string, 0, inventory, 0, 12);
 
-
-        //2022-05-16T08:58:03.6480577+00:00
-
+        /*
+        2022-05-16T08:58:03.6480577+00:00
+        ->
+        08:58:03
+        */
         String time = inventory[0];
-
         inventory[0] = time.substring(11,19);
-
-
     }
 
     public String getX(int x){

@@ -44,13 +44,10 @@ public class WarehouseController {
     private String itemPicked;
 
     public void initialize() throws IOException, InterruptedException {
-
         warehouseIns = new Warehouse();
         inventory = warehouseIns.getStringArray();
         initTableView();
         initChoiceBoxes();
-
-
     }
 
     private void initChoiceBoxes() {
@@ -59,7 +56,6 @@ public class WarehouseController {
         for (int i = 1; i <= size; i++) {
             str[i-1] = String.valueOf(i);
         }
-
         pickCB.setItems(FXCollections.observableArrayList(str));
         putCB.setItems(FXCollections.observableArrayList(str));
     }

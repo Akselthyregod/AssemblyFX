@@ -33,8 +33,15 @@ public class AssemblyController {
     private Label health;
     AssemblyMQTT mqtt;
 
+    /*
+        Keys:
+        state
+        lastOP
+        currentOP
+        time
+        health
+     */
     private Map<String, String> info;
-    private MainController helloController;
 
     public AssemblyController() throws MqttException {
     }

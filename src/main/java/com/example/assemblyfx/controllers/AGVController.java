@@ -34,9 +34,14 @@ public class AGVController implements Initializable {
 
     AGV agv1 = new AGV();
 
+    /*
+        Keys:
+        state
+        battery
+        program name
+        timestamp
+     */
     private Map<String, String> status;
-
-    //Need a map of all values/states of the component
 
     private String[] allPrograms =
             {"MoveToChargerOperation", "MoveToAssemblyOperation",
@@ -66,20 +71,13 @@ public class AGVController implements Initializable {
 
     public Map<String, String> getStatus() throws IOException, InterruptedException {
         JSONObject obj = agv1.callGetStatus();
-        /*
-        Keys:
-        state
-        battery
-        program name
-        timestamp
-         */
+
         if(obj == null){
             return status;
         }
 
         status.put("state", String.valueOf(obj.getInt("state")));
         status.put("battery", String.valueOf(obj.getInt("battery")));
-
         status.put("program name", obj.getString("program name"));
         status.put("timestamp", obj.getString("timestamp"));
 

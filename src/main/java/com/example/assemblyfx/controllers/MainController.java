@@ -76,8 +76,6 @@ public class MainController {
     timestamp
      */
     private Map<String, String> agvInfo;
-
-    //"static" position set when move button is pressed
     private String agvPosition;
     public String agvHoldingItem;
     public String assemblyHoldingItem;
@@ -97,7 +95,6 @@ public class MainController {
 
         //inject this controller in warehouse to allow it to access tabPane
         warehouseController.injectMainController(this);
-
     }
 
 
@@ -109,33 +106,26 @@ public class MainController {
         TableColumn<Status, String> col4 = new TableColumn<>("Warehouse");
         statusTable.getColumns().addAll(col1, col2, col3, col4);
 
-
         col1.setCellValueFactory(status -> new SimpleStringProperty(status.getValue().time()));
         col2.setCellValueFactory(status -> new SimpleStringProperty(status.getValue().stateAGV()));
         col3.setCellValueFactory(status -> new SimpleStringProperty(status.getValue().stateAssembly()));
         col4.setCellValueFactory(status -> new SimpleStringProperty(status.getValue().stateWarehouse()));
-
         statusTable.setItems(statusObservableList);
     }
 
     private void addToTable(){
-
         statusObservableList.add(new Status(agvInfo.get("state"), assemblyInfo.get("state"), warehouseInventory.getState(), new Date().toString()));
-
-   }
+    }
 
     public void getWarehouseInventory(){
         warehouseInventory = warehouseController.getInventory();
-
     }
     public void getAssemblyMap() {
         assemblyInfo = assemblyController.getInfo();
-
     }
 
     public void getAGVInfo() throws IOException, InterruptedException {
         agvInfo = agvController.getStatus();
-
     }
 
     //pulls info from services. Takes a bit of time to execute
@@ -173,32 +163,6 @@ public class MainController {
         addToTable();
     }
 
-    public void startProduction(ActionEvent actionEvent) throws IOException, InterruptedException, MqttException {
-
-        /*
-            Tell AGV to go to warehouse
-            when at warehouse pick item
-            move to assembly
-            wait for assembly
-            move to warehouse
-            put in warehouse
-
-            **Check for battery**
-
-            {"MoveToChargerOperation", "MoveToAssemblyOperation",
-            "MoveToStorageOperation","PutAssemblyOperation",
-            "PickAssemblyOperation","PickWarehouseOperation",
-            "PutWarehouseOperation"};
-        */
-
-    }
-
-
-    private void timeout(int time) throws InterruptedException, IOException {
-        Thread.sleep(time);
-        updateText(new ActionEvent());
-    }
-
     private void setWarehouseText(){
         textWarehouse.appendText("\n1: " + warehouseInventory.getTray1());
         textWarehouse.appendText("\n2: " + warehouseInventory.getTray2());
@@ -210,7 +174,6 @@ public class MainController {
         textWarehouse.appendText("\n8: " + warehouseInventory.getTray8());
         textWarehouse.appendText("\n9: " + warehouseInventory.getTray9());
         textWarehouse.appendText("\n10: " + warehouseInventory.getTray10());
-
     }
 
     public void moveChargeButton(ActionEvent actionEvent) throws IOException, InterruptedException {
@@ -312,7 +275,7 @@ public class MainController {
         }
     }
 
-
+    //record used to collect states from each service in an object
     public record Status(String stateAGV, String stateAssembly, String stateWarehouse, String time){}
 
 }

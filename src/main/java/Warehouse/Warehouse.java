@@ -25,8 +25,6 @@ public class Warehouse {
          *         pickItem        :   arg[0] = "pickItem"
          *                             arg[1] = trayID (int)
          */
-
-
         File file = new File("../AssemblyFX/src/main/resources/WarehouseSpring-0.0.1-SNAPSHOT.jar");
         String filePath = file.getPath();
 
@@ -41,10 +39,7 @@ public class Warehouse {
         raw = raw.replace("Received inventory operation.", "");
         JSONObject obj = new JSONObject(raw);
 
-
         return obj;
-
-
     }
 
     private Inventory callPickItem(String trayID) throws IOException, InterruptedException {
@@ -59,8 +54,6 @@ public class Warehouse {
          *         pickItem        :   arg[0] = "pickItem"
          *                             arg[1] = trayID (int)
          */
-
-
 
         File file = new File("../AssemblyFX/src/main/resources/WarehouseSpring-0.0.1-SNAPSHOT.jar");
         String filePath = file.getPath();
@@ -77,9 +70,6 @@ public class Warehouse {
         JSONObject obj = new JSONObject(raw);
 
         return getInventoryObj(obj);
-
-
-
     }
 
     private Inventory callInsertItem(String name, String trayID) throws IOException, InterruptedException {
@@ -94,7 +84,6 @@ public class Warehouse {
          *         pickItem        :   arg[0] = "pickItem"
          *                             arg[1] = trayID (int)
          */
-
 
         File file = new File("../AssemblyFX/src/main/resources/WarehouseSpring-0.0.1-SNAPSHOT.jar");
         String filePath = file.getPath();
@@ -111,8 +100,6 @@ public class Warehouse {
         JSONObject obj = new JSONObject(raw);
 
         return getInventoryObj(obj);
-
-
     }
 
     public Inventory insertItem(String name, String trayID) throws IOException, InterruptedException {
@@ -207,6 +194,4 @@ public class Warehouse {
 
         return time;
     }
-
-
 }
